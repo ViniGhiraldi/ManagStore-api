@@ -1,0 +1,26 @@
+{
+  "name": "vite-project-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx watch src/index.ts"
+  },
+  "keywords": [],
+  "author": "Vinicius Correia",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "http-status-codes": "^2.2.0",
+    "knex": "^2.4.2",
+    "sqlite": "^4.2.1",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "tsup": "^6.7.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.3"
+  }
+}
