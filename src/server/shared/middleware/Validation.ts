@@ -13,7 +13,7 @@ export type TValidationProps = TValidationObjectProps[];
 
 type TValidation = (validations: TValidationProps) => RequestHandler;
 
-export const Validation: TValidation = (validations) => async (req, res, next) => {
+export const Validation: TValidation = (validations) => /* async */ (req, res, next) => {
     const errorsResult: Record<string, ZodFormattedError<{[x: string]: any;}, string>> = {};
 
     validations.forEach(async objectValidation => {
