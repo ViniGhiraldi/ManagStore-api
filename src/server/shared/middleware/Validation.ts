@@ -17,7 +17,7 @@ export const Validation: TValidation = (validations) => /* async */ (req, res, n
     const errorsResult: Record<string, ZodFormattedError<{[x: string]: any;}, string>> = {};
 
     validations.forEach(async objectValidation => {
-        const result = objectValidation.schema.safeParse(req[objectValidation.path])
+        const result = objectValidation.schema.strict().safeParse(req[objectValidation.path])
 
         if(!result.success){
             errorsResult[objectValidation.path] = result.error.format();

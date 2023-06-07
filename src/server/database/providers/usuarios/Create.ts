@@ -1,10 +1,10 @@
-import { IProduto } from "../../../shared/models";
+import { IUsuario } from "../../../shared/models";
 import { Knex } from "../../knex";
 
-export const create = async (data: Omit<IProduto, 'id'>): Promise<number | Error> => {
+export const create = async (data: Omit<IUsuario, 'id'>): Promise<number | Error> => {
     try {
-        const [result] = await Knex('produtos').insert(data).returning('id');
-        
+        const [result] = await Knex('usuarios').insert(data).returning('id');
+
         if(result.id) return result.id;
 
         return new Error('Erro ao criar registro');

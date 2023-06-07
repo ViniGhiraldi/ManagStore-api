@@ -1,18 +1,16 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 import { Validation } from "../../shared/middleware";
-import { ProdutosProvider } from "../../database/providers";
+import { UsuariosProvider } from "../../database/providers";
 import { StatusCodes } from "http-status-codes";
 
 const validationBody = z.object({
     nome: z.string().min(3),
-    descricao: z.string().min(40),
-    valor: z.number().transform(value => Number(value.toFixed(2))).pipe(z.number().positive()),
-    promocao: z.number().int().nonnegative().lte(100).default(0),
-    foto: z.string()
+    email: z.string().email().min(5).toLowerCase(),
+    senha: z.string().min(5),
 })
 
-export const createValidation = Validation([
+export const signUpValidation = Validation([
     {
         path: 'body',
         schema: validationBody
@@ -21,8 +19,8 @@ export const createValidation = Validation([
 
 type TBodyProps = z.infer<typeof validationBody>;
 
-export const create = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
-    const result = await ProdutosProvider.create(req.body);
+export const signUp = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
+    const result = await UsuariosProvider.create({...req.body, email: req.body.email.toLowerCase()});
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
@@ -30,6 +28,6 @@ export const create = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
             }
         })
     }
-    
+
     return res.status(StatusCodes.CREATED).json(result);
 }
