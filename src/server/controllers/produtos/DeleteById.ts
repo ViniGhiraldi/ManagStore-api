@@ -8,7 +8,7 @@ const validationParams = z.object({
     id: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0)
 });
 
-export const getByIdValidation = Validation([
+export const deleteByIdValidation = Validation([
     {
         path: 'params',
         schema: validationParams
@@ -19,14 +19,14 @@ type TParamsProps = {
     id?: number
 }
 
-export const getById = async (req:Request<TParamsProps>, res:Response) => {
+export const deleteById = async (req:Request<TParamsProps>, res:Response) => {
     if(!req.params.id) return res.status(StatusCodes.BAD_REQUEST).json({
         errors: {
             default: 'id precisa ser informado'
         }
     })
 
-    const result = await ProdutosProvider.getById(req.params.id);
+    const result = await ProdutosProvider.deleteById(req.params.id);
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors:{
@@ -35,5 +35,5 @@ export const getById = async (req:Request<TParamsProps>, res:Response) => {
         })
     }
 
-    return res.status(StatusCodes.OK).json(result);
+    return res.status(StatusCodes.NO_CONTENT).json(result);
 }
