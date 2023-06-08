@@ -10,7 +10,7 @@ const validationParams = z.object({
     produto_id: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0)
 })
 
-export const deleteByIdValidation = Validation([
+export const getByIdValidation = Validation([
     {
         path: 'params',
         schema: validationParams
@@ -20,16 +20,16 @@ export const deleteByIdValidation = Validation([
 type TParamsProps = {
     user_id?: number;
     produto_id?: number;
-}
+};
 
-export const deleteById = async (req:Request<TParamsProps>, res:Response) => {
+export const getById = async (req:Request<TParamsProps>, res:Response) => {
     if(!req.params.user_id || !req.params.produto_id) return res.status(StatusCodes.BAD_REQUEST).json({
         errors: {
             default: 'user_id e produto_id precisam ser informados'
         }
     })
 
-    const result = await ProdutosDosUsuariosProvider.deleteById(req.params as IProdutosDosUsuarios);
+    const result = await ProdutosDosUsuariosProvider.getById(req.params as IProdutosDosUsuarios);
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors:{
@@ -38,5 +38,5 @@ export const deleteById = async (req:Request<TParamsProps>, res:Response) => {
         })
     }
 
-    return res.status(StatusCodes.NO_CONTENT).json();
+    return res.status(StatusCodes.OK).json(result);
 }

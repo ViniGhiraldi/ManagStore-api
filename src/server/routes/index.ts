@@ -20,7 +20,8 @@ routes.delete('/produtos/:id', ProdutosController.deleteByIdValidation, Produtos
 
 //métodos de controle do usuário e seus produtos
 routes.post('/produtos-usuarios', ProdutosDosUsuariosController.createValidation, ProdutosDosUsuariosController.create);
-routes.get('/produtos-usuarios', ProdutosDosUsuariosController.getAllValidation, ProdutosDosUsuariosController.getAll);
-routes.delete('/produtos-usuarios', ProdutosDosUsuariosController.deleteByIdValidation, ProdutosDosUsuariosController.deleteById);
+routes.get('/produtos-usuarios/:user_id', ProdutosDosUsuariosController.getAllByUserIdValidation, ProdutosDosUsuariosController.getAllByUserId);
+routes.get('/produtos-usuarios/:user_id/:produto_id', ProdutosDosUsuariosController.getByIdValidation, ProdutosDosUsuariosController.getById);
+routes.delete('/produtos-usuarios/:user_id/:produto_id', ProdutosDosUsuariosController.deleteByIdValidation, ProdutosDosUsuariosController.deleteById);
 
 export { routes };
