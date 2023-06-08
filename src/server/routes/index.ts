@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { ProdutosController, ProdutosDosUsuariosController } from "../controllers";
-import { UsuariosController } from "../controllers/usuarios";
+import { ProdutosController, ProdutosDosUsuariosController, UsuariosController } from "../controllers";
 
 const routes = Router();
 

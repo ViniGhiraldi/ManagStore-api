@@ -7,7 +7,6 @@ export async function up(knex: Knex) {
             .index()
             .notNullable()
             .checkPositive()
-            .primary()
             .references('id')
             .inTable('usuarios')
             .onUpdate('CASCADE')
@@ -17,11 +16,12 @@ export async function up(knex: Knex) {
             .index()
             .notNullable()
             .checkPositive()
-            .primary()
             .references('id')
             .inTable('produtos')
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
+        table
+           .primary(['user_id', 'produto_id']);
     })
     .then(()=>{
         console.log(`# Created table produtos_dos_usuarios`)

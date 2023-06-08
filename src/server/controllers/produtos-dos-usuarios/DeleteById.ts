@@ -3,8 +3,8 @@ import { z } from "zod";
 import { Validation } from "../../shared/middleware";
 
 const validationBody = z.object({
-    user_id: z.number().positive(),
-    produto_id: z.number().positive()
+    user_id: z.number().int().positive(),
+    produto_id: z.number().int().positive()
 })
 
 export const deleteByIdValidation = Validation([
