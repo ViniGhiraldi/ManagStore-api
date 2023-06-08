@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Validation } from "../../shared/middleware";
 import { UsuariosProvider } from "../../database/providers";
 import { StatusCodes } from "http-status-codes";
+import { PasswordCrypto } from "../../shared/services";
 
 const validationBody = z.object({
     nome: z.string().min(3),
@@ -20,7 +21,14 @@ export const signUpValidation = Validation([
 type TBodyProps = z.infer<typeof validationBody>;
 
 export const signUp = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
-    const result = await UsuariosProvider.create({...req.body, email: req.body.email.toLowerCase()});
+    const passwordHashed = await PasswordCrypto.passwordHashed(req.body.senha);
+
+    const result = await UsuariosProvider.create({
+        ...req.body, 
+        email: req.body.email.toLowerCase(), 
+        senha: passwordHashed
+    });
+
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Validation } from "../../shared/middleware";
 import { UsuariosProvider } from "../../database/providers";
 import { StatusCodes } from "http-status-codes";
+import { PasswordCrypto } from "../../shared/services";
 
 const validationBody = z.object({
     email: z.string().email().min(5).toLowerCase(),
@@ -35,13 +36,16 @@ export const signIn = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
         })
     }
 
-    if(req.body.senha === userData.senha){
-        return res.status(StatusCodes.OK).json(userData);
+    const verifyPassword = await PasswordCrypto.verifyPassword(req.body.senha, userData.senha)
+
+    if(!verifyPassword){
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            errors: {
+                default: 'Email ou senha são inválidos'
+            }
+        });
     }
 
-    return res.status(StatusCodes.UNAUTHORIZED).json({
-        errors: {
-            default: 'Email ou senha são inválidos'
-        }
-    });
+    return res.status(StatusCodes.OK).json(userData);
+
 }
