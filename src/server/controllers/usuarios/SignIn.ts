@@ -3,7 +3,7 @@ import { z } from "zod";
 import { Validation } from "../../shared/middleware";
 import { UsuariosProvider } from "../../database/providers";
 import { StatusCodes } from "http-status-codes";
-import { PasswordCrypto } from "../../shared/services";
+import { JWTService, PasswordCrypto } from "../../shared/services";
 
 const validationBody = z.object({
     email: z.string().email().min(5).toLowerCase(),
@@ -46,6 +46,8 @@ export const signIn = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
         });
     }
 
-    return res.status(StatusCodes.OK).json(userData);
+    const accessToken = JWTService.sign({uid: userData.id});
+
+    return res.status(StatusCodes.OK).json({accessToken});
 
 }
