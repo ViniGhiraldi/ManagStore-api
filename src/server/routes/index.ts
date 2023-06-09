@@ -9,8 +9,8 @@ routes.post('/cadastrar', UsuariosController.signUpValidation, UsuariosControlle
 routes.post('/entrar', UsuariosController.signInValidation, UsuariosController.signIn);
 
 //métodos dos usuários (precisa de login)
-routes.put('/usuarios/:id', EnsureAuthenticated, UsuariosController.updateByIdValidation, UsuariosController.updateById);
-routes.delete('/usuarios/:id', EnsureAuthenticated, UsuariosController.deleteByIdValidation, UsuariosController.deleteById);
+routes.put('/usuarios', EnsureAuthenticated, UsuariosController.updateByIdValidation, UsuariosController.updateById);
+routes.delete('/usuarios', EnsureAuthenticated, UsuariosController.deleteById);
 
 //métodos dos produtos
 routes.post('/produtos', EnsureAuthenticated, ProdutosController.createValidation, ProdutosController.create);
@@ -21,8 +21,8 @@ routes.delete('/produtos/:id', EnsureAuthenticated, ProdutosController.deleteByI
 
 //métodos de controle do usuário e seus produtos
 routes.post('/produtos-usuarios', EnsureAuthenticated, ProdutosDosUsuariosController.createValidation, ProdutosDosUsuariosController.create);
-routes.get('/produtos-usuarios/:user_id', EnsureAuthenticated, ProdutosDosUsuariosController.getAllByUserIdValidation, ProdutosDosUsuariosController.getAllByUserId);
-routes.get('/produtos-usuarios/:user_id/:produto_id', EnsureAuthenticated, ProdutosDosUsuariosController.getByIdValidation, ProdutosDosUsuariosController.getById);
-routes.delete('/produtos-usuarios/:user_id/:produto_id', EnsureAuthenticated, ProdutosDosUsuariosController.deleteByIdValidation, ProdutosDosUsuariosController.deleteById);
+routes.get('/produtos-usuarios', EnsureAuthenticated, ProdutosDosUsuariosController.getAllByUserIdValidation, ProdutosDosUsuariosController.getAllByUserId);
+routes.get('/produtos-usuarios/:produto_id', EnsureAuthenticated, ProdutosDosUsuariosController.getByIdValidation, ProdutosDosUsuariosController.getById);
+routes.delete('/produtos-usuarios/:produto_id', EnsureAuthenticated, ProdutosDosUsuariosController.deleteByIdValidation, ProdutosDosUsuariosController.deleteById);
 
 export { routes };

@@ -6,7 +6,6 @@ import { StatusCodes } from "http-status-codes";
 import { IProdutosDosUsuarios } from "../../shared/models";
 
 const validationParams = z.object({
-    user_id: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0),
     produto_id: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0)
 })
 
@@ -18,18 +17,20 @@ export const getByIdValidation = Validation([
 ])
 
 type TParamsProps = {
-    user_id?: number;
     produto_id?: number;
 };
 
 export const getById = async (req:Request<TParamsProps>, res:Response) => {
-    if(!req.params.user_id || !req.params.produto_id) return res.status(StatusCodes.BAD_REQUEST).json({
+    if(!req.params.produto_id) return res.status(StatusCodes.BAD_REQUEST).json({
         errors: {
-            default: 'user_id e produto_id precisam ser informados'
+            default: 'produto_id precisa ser informado'
         }
     })
 
-    const result = await ProdutosDosUsuariosProvider.getById(req.params as IProdutosDosUsuarios);
+    const result = await ProdutosDosUsuariosProvider.getById({
+        user_id: Number(req.headers.userId), 
+        produto_id: req.params.produto_id
+    });
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors:{

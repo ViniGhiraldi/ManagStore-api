@@ -3,10 +3,7 @@ import { z } from "zod";
 import { Validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
 import { UsuariosProvider } from "../../database/providers";
-
-const validationParams = z.object({
-    id: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0)
-})
+import { PasswordCrypto } from "../../shared/services";
 
 const validationBody = z.object({
     nome: z.string().min(3),
@@ -16,29 +13,22 @@ const validationBody = z.object({
 
 export const updateByIdValidation = Validation([
     {
-        path: 'params',
-        schema: validationParams
-    },
-    {
         path: 'body',
         schema: validationBody
     }
 ])
 
-type TParamsProps = {
-    id?: number;
-}
-
 type TBodyProps = z.infer<typeof validationBody>;
 
-export const updateById = async (req:Request<TParamsProps, {}, TBodyProps>, res:Response) => {
-    if(!req.params.id) return res.status(StatusCodes.BAD_REQUEST).json({
-        errors: {
-            default: 'id precisa ser informado'
-        }
-    })
+export const updateById = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
+    const passwordHashed = await PasswordCrypto.passwordHashed(req.body.senha);
 
-    const result = await UsuariosProvider.updateById(req.params.id, {...req.body, email: req.body.email.toLowerCase()});
+    const result = await UsuariosProvider.updateById(Number(req.headers.userId), {
+        ...req.body, 
+        email: req.body.email.toLowerCase(), 
+        senha: passwordHashed
+    });
+    
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
