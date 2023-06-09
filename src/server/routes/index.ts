@@ -21,7 +21,7 @@ routes.delete('/produtos/:id', EnsureAuthenticated, ProdutosController.deleteByI
 
 //métodos de controle do usuário e seus produtos
 routes.post('/produtos-usuarios', EnsureAuthenticated, ProdutosDosUsuariosController.createValidation, ProdutosDosUsuariosController.create);
-routes.get('/produtos-usuarios', EnsureAuthenticated, ProdutosDosUsuariosController.getAllByUserIdValidation, ProdutosDosUsuariosController.getAllByUserId);
+routes.get('/produtos-usuarios', EnsureAuthenticated, ProdutosDosUsuariosController.getAllValidation, ProdutosDosUsuariosController.getAll);
 routes.get('/produtos-usuarios/:produto_id', EnsureAuthenticated, ProdutosDosUsuariosController.getByIdValidation, ProdutosDosUsuariosController.getById);
 routes.delete('/produtos-usuarios/:produto_id', EnsureAuthenticated, ProdutosDosUsuariosController.deleteByIdValidation, ProdutosDosUsuariosController.deleteById);
 

@@ -10,7 +10,7 @@ const validationQuery = z.object({
     filter: z.string().optional() 
 })
 
-export const getAllByUserIdValidation = Validation([
+export const getAllValidation = Validation([
     {
         path: 'query',
         schema: validationQuery
@@ -19,8 +19,19 @@ export const getAllByUserIdValidation = Validation([
 
 type TQueryProps = z.infer<typeof validationQuery>;
 
-export const getAllByUserId = async (req:Request<{}, {}, {}, TQueryProps>, res: Response) => {
-    const result = await ProdutosDosUsuariosProvider.getAllByUserId(Number(req.headers.userId), req.query.page, req.query.limit, req.query.filter);
+export const getAll = async (req:Request<{}, {}, {}, TQueryProps>, res: Response) => {
+    const userId = Number(req.headers.userId);
+
+    const totalCount = await ProdutosDosUsuariosProvider.count(userId, req.query.filter);
+    if(totalCount instanceof Error){
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors:{
+                default: totalCount.message
+            }
+        })
+    }
+
+    const result = await ProdutosDosUsuariosProvider.getAll(userId, req.query.page, req.query.limit, req.query.filter);
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors:{
@@ -28,6 +39,9 @@ export const getAllByUserId = async (req:Request<{}, {}, {}, TQueryProps>, res: 
             }
         })
     }
+
+    res.setHeader('access-control-expose-headers', 'x-total-count');
+    res.setHeader('x-total-count', totalCount);
 
     return res.status(StatusCodes.OK).json(result);
 }

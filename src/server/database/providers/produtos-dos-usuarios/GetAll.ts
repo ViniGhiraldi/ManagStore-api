@@ -1,7 +1,7 @@
 import { IProduto } from "../../../shared/models";
 import { Knex } from "../../knex"
 
-export const getAllByUserId = async (user_id: number, page = 1, limit = Number(process.env.LIMIT) || 12, filter = ''): Promise<IProduto[] | Error> => {
+export const getAll = async (user_id: number, page = 1, limit = Number(process.env.LIMIT) || 12, filter = ''): Promise<IProduto[] | Error> => {
     try {
         const result = await Knex('produtos')
             .innerJoin('produtos_dos_usuarios', 'produtos_dos_usuarios.produto_id', 'produtos.id')
