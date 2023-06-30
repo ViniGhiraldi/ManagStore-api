@@ -1,11 +1,12 @@
 import { IProduto } from "../../../shared/models";
 import { Knex } from "../../knex"
 
-export const getAll = async (page = 1, limit = Number(process.env.LIMIT) || 12, filter = ''): Promise<IProduto[] | Error> => {
+export const getAll = async (page = 1, limit = Number(process.env.LIMIT) || 12, filter = '', category = ''): Promise<IProduto[] | Error> => {
     try {
         const result = await Knex('produtos')
             .select('*')
-            .where('nome', 'like', `%${filter}%`)
+            .where('categoria', 'like', `%${category}%`)
+            .andWhere('nome', 'like', `%${filter}%`)
             .limit(limit)
             .offset((page - 1) * limit);
 

@@ -11,6 +11,7 @@ const validationParams = z.object({
 const validationBody = z.object({
     nome: z.string().min(3),
     descricao: z.string().min(40),
+    categoria: z.enum(['livros', 'jogos']),
     valor: z.number().transform(value => Number(value.toFixed(2))).pipe(z.number().positive()),
     promocao: z.number().int().nonnegative().lte(100).default(0),
     foto: z.string()

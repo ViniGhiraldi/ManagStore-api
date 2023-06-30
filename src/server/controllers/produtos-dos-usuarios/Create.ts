@@ -30,5 +30,5 @@ export const create = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
         })
     }
 
-    return res.status(StatusCodes.CREATED).json(result);
+    return res.status(StatusCodes.CREATED).json(...result);
 }

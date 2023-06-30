@@ -46,8 +46,23 @@ export const signIn = async (req:Request<{}, {}, TBodyProps>, res:Response) => {
         });
     }
 
-    const accessToken = JWTService.sign({uid: userData.id});
+    const accessToken = JWTService.generateAccessToken({uid: userData.id, email: userData.email});
+    const refreshToken = JWTService.generateRefreshToken({uid: userData.id, email: userData.email});
 
-    return res.status(StatusCodes.OK).json({accessToken});
+    return res.status(StatusCodes.OK).json({
+        accessToken, 
+        refreshToken, 
+        userData: {nome: userData.nome, foto: userData.foto}
+    });
+
+    /* const result = {
+        accessToken,
+        refreshToken,
+        userData: {
+            nome: userData.nome, foto: userData.foto
+        }
+    };
+
+    return res.status(StatusCodes.OK).cookie('userAccess', JSON.stringify(result), {}).json(); */
 
 }

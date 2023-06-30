@@ -5,7 +5,7 @@ export const getById = async (data: IProdutosDosUsuarios): Promise<IProduto | Er
     try {
         const result: IProduto | undefined = await Knex('produtos')
             .innerJoin('produtos_dos_usuarios', 'produtos_dos_usuarios.produto_id', 'produtos.id')
-            .select('produtos.id', 'produtos.nome', 'produtos.descricao', 'produtos.valor', 'produtos.promocao', 'produtos.foto')
+            .select('produtos.id', 'produtos.nome', 'produtos.descricao', 'produtos.categoria', 'produtos.valor', 'produtos.promocao', 'produtos.foto')
             .where('user_id', '=', data.user_id)
             .andWhere('produto_id', '=', data.produto_id)
             .first();

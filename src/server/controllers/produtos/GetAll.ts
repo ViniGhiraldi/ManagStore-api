@@ -7,7 +7,8 @@ import { StatusCodes } from "http-status-codes";
 const validationQuery = z.object({
     limit: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0).optional(),
     page: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0).optional(),
-    filter: z.string().optional()
+    filter: z.string().optional(),
+    category: z.enum(['livros', 'jogos']).optional()
 })
 
 export const getAllValidation = Validation([
@@ -20,7 +21,7 @@ export const getAllValidation = Validation([
 type TQueryProps = z.infer<typeof validationQuery>;
 
 export const getAll = async (req:Request<{}, {}, {}, TQueryProps>, res:Response) => {
-    const totalCount = await ProdutosProvider.count(req.query.filter);
+    const totalCount = await ProdutosProvider.count(req.query.filter, req.query.category);
     if(totalCount instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
@@ -29,7 +30,7 @@ export const getAll = async (req:Request<{}, {}, {}, TQueryProps>, res:Response)
         })
     }
 
-    const result = await ProdutosProvider.getAll(req.query.page, req.query.limit, req.query.filter);
+    const result = await ProdutosProvider.getAll(req.query.page, req.query.limit, req.query.filter, req.query.category);
     if(result instanceof Error){
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors:{

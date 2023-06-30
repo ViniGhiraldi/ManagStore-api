@@ -3,7 +3,6 @@ import { z } from "zod";
 import { Validation } from "../../shared/middleware";
 import { ProdutosDosUsuariosProvider } from "../../database/providers";
 import { StatusCodes } from "http-status-codes";
-import { IProdutosDosUsuarios } from "../../shared/models";
 
 const validationParams = z.object({
     produto_id: z.string().regex(/^\d+$/).transform(Number).refine((n) => n>0)

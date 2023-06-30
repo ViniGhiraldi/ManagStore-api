@@ -7,6 +7,7 @@ import { PasswordCrypto } from "../../shared/services";
 
 const validationBody = z.object({
     nome: z.string().min(3),
+    foto: z.string().optional(),
     email: z.string().email().min(5).toLowerCase(),
     senha: z.string().min(5),
 })

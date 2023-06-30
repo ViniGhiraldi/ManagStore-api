@@ -9,7 +9,9 @@ Server.use(cors({
     origin: process.env.CORS_ACCESS?.split(' ') || []
 }))
 
-Server.use(express.json());
+Server.use(express.json({limit: '5mb'}));
+
+Server.use(express.urlencoded({limit: '5mb'}));
 
 Server.use(routes);
 
